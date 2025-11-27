@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Crash Course</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        width: 100%;
+        height: 100vh;
+    }
+</style>
+</head>
+<body>
+    <div id="map">
+
+    </div>
+</body>
+</html>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    // Map Intialization
+    var map = L.map('map').setView([24.8607, 67.0011], 12);
+
+    // OSM Layer
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    //osm.addTo(map);
+
+    // Tile layers from (https://leaflet-extras.github.io/leaflet-providers/preview/)
+    var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+   
+    var OpenRailwayMap = L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
+	maxZoom: 19,
+	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Map style: &copy; <a href="https://www.OpenRailwayMap.org">OpenRailwayMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    });
+    Esri_WorldImagery.addTo(map);
+    OpenRailwayMap.addTo(map);
+
+    // Google Street Maps
+    // Note that difference in the "lyrs" parameter in the URL:
+
+    // Hybrid: s,h;
+    // Satellite: s;
+    // Streets: m;
+    // Terrain: p;
+
+    googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+    });
+    googleStreets.addTo(map);
+
+    // Adding marker with popup
+    var myIcon = L.icon({
+    iconUrl: 'img/red_marker.png',
+    iconSize: [40, 40],
+    });
+
+    var single_marker = L.marker([24.8607, 67.0011], {icon: myIcon, draggable: true}).addTo(map)
+    var popup = single_marker.bindPopup('Karachi.<br> The City of Lights.').openPopup();
+    popup.addTo(map);
+
+</script>
