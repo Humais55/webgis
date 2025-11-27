@@ -16,19 +16,29 @@
         width: 100%;
         height: 100vh;
     }
+    .coordinate{
+        position: absolute;
+        bottom: 10px;
+        right: 50%;
+    }
 </style>
 </head>
 <body>
     <div id="map">
-
+        <div class="leaflet-control coordinate"></div>
     </div>
 </body>
 </html>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="./js/line.js"></script>
+<script src="./js/polygon.js"></script>
+<script src="./js/point.js"></script>
+
 
 <script>
+                                // Tile Layer and WMS
     // Map Intialization
     var map = L.map('map').setView([24.8607, 67.0011], 12);
 
@@ -36,7 +46,7 @@
     var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
-    //osm.addTo(map);
+    osm.addTo(map);
 
     // Tile layers from (https://leaflet-extras.github.io/leaflet-providers/preview/)
     var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -58,11 +68,19 @@
     // Streets: m;
     // Terrain: p;
 
-    googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
     maxZoom: 20,
     subdomains:['mt0','mt1','mt2','mt3']
     });
     googleStreets.addTo(map);
+
+    //For Raster Files
+    var nexrad = L.tileLayer.wms("http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi", {
+    layers: 'nexrad-n0r-900913',
+    format: 'image/png',
+    transparent: true,
+    attribution: "Weather data © 2012 IEM Nexrad"
+    });
 
     // Adding marker with popup
     var myIcon = L.icon({
@@ -74,4 +92,43 @@
     var popup = single_marker.bindPopup('Karachi.<br> The City of Lights.').openPopup();
     popup.addTo(map);
 
+    // GeoJSON
+    var point = L.geoJSON(pointJson).addTo(map);
+    var line = L.geoJSON(lineJson).addTo(map);
+    var polygon = L.geoJSON(polygonJson, {
+            onEachFeature: function(feature, layer){
+                layer.bindPopup('<b>Name: </b>' + feature.properties.Name)
+            },
+            style:{
+               // fillColor: 'blue',
+                fillOpacity: 1,
+                //color: '#c0c0c0',
+            }
+    }).addTo(map);
+
+    //Layer Controller
+    var baseMaps = {
+    "Open Street Map": osm,
+    "ESRI Worl Imagery": Esri_WorldImagery,
+    "Railway Map": OpenRailwayMap,
+    "Google Streets Map": googleStreets,
+    };
+
+    var overlayMaps = {
+        "Marker": single_marker,
+        "Polygon": polygon,
+        "Line": line,
+        "Point": point,
+        "NexRad": nexrad,
+    };
+
+    var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);  
+    
+    // Leaflet Events
+    map.on('mousemove', function(e){
+        document.getElementsByClassName('coordinate')[0].innerHTML = "Lat: " + e.latlng.lat + "Lng: " + e.latlng.lng;
+    })
+
+    // Style Customization
+    
 </script>
