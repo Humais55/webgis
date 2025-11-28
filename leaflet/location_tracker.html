@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real time location tracker App</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        width: 100%;
+        height: 100vh;
+    }
+</style>
+</head>
+<body>
+    <div id="map">
+        
+    </div>
+</body>
+</html>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    // Map Intialization
+    var map = L.map('map').setView([24.8607, 67.0011], 6);
+
+    // OSM Layer
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    osm.addTo(map);
+
+    if(!navigator.geolocation){
+        console.log("Your browser doesn't support the service")
+    }
+    else{
+        setInterval(() => {
+            navigator.geolocation.getCurrentPosition(getPosition)
+        }, 5000);
+    }
+
+    var marker, circle;
+
+    function getPosition(position){
+        var lat = position.coords.latitude
+        var lng = position.coords.longitude
+        var accuracy = position.coords.accuracy
+
+        if(marker){
+            map.removeLayer(marker)
+        }
+
+        if(circle){
+            map.removeLayer(circle)
+        }
+
+        marker = L.marker([lat, lng])
+        circle = L.circle([lat, lng], {radius: accuracy})
+
+        var featureGroup = L.featureGroup([marker, circle]).addTo(map)
+
+        map.fitBounds(featureGroup.getBounds())
+
+        console.log("Your coordinate is: Lat:" + lat + " Long:" + lng + " Accuracy: " + accuracy)
+    }
+</script>
