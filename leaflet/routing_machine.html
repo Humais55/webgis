@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Routing Machine</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        width: 100%;
+        height: 100vh;
+    }
+</style>
+</head>
+<body>
+    <div id="map">
+        
+    </div>
+</body>
+</html>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<!-- Leaflet Routing Machine JS -->
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script>
+    // Map Intialization
+    var map = L.map('map').setView([24.8607, 67.0011], 11);
+
+    // OSM Layer
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    osm.addTo(map);
+
+    // Adding marker with popup
+    var myIcon = L.icon({
+    iconUrl: 'img/red_marker.png',
+    iconSize: [40, 40],
+    });
+
+    var single_marker = L.marker([24.8607, 67.0011], {icon: myIcon, draggable: true}).addTo(map)
+    var popup = single_marker.bindPopup('Karachi.<br> The City of Lights.').openPopup();
+    popup.addTo(map);
+
+    // Icon at Home
+    var taxiIcon = L.icon({
+        iconUrl:"img/taxi.png",
+        iconSize: [70, 70]
+    })
+    var home_marker = L.marker([25.00999875395078, 67.0859796589589], {icon: taxiIcon}).addTo(map)
+
+    // Map Click Event
+    map.on('click', function (e){
+        console.log(e)
+        var second_marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+        
+        L.Routing.control({
+        waypoints: [
+            L.latLng(25.00999875395078, 67.0859796589589),
+            L.latLng(e.latlng.lat, e.latlng.lng)
+            ]
+        }).on('routesfound', function(e){
+            console.log(e)
+            e.routes[0].coordinates.forEach(function(coord, index){
+                setTimeout(() => { 
+                    home_marker.setLatLng([coord.lat, coord.lng])
+            }, 100 * index);   
+            })
+        })
+        .addTo(map);
+    })
+
+    
+
+</script>
