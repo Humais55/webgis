@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Routing Machine</title>
+    <title>Printing Map</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <style>
@@ -24,13 +24,17 @@
     </div>
 
     <button onclick=fullscreenview()>View on Full Screen</button>
+    <!-- <button class="print-map">Print Map</button> -->
 
 </body>
 </html>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
+<!-- Jquery CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- Print Map library -->
+<script src="./lib/leaflet.browser.print.min.js"></script>
 <script>
     // Map Intialization
     var map = L.map('map').setView([24.8607, 67.0011], 11);
@@ -59,6 +63,13 @@
     var mapId = document.getElementById('map');
     function fullscreenview(){
         mapId.requestFullscreen();
-    }
+    };
+
+    // Map Print
+    // $('.print-map').click(function(){
+    //     window.print();
+    // });
+
+    L.control.browserPrint().addTo(map);
     
 </script>
