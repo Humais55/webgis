@@ -1,4 +1,4 @@
-{
+var karachi_district_geojson = {
 "type": "FeatureCollection",
 "name": "karachi_district",
 "features": [
