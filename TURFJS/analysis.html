@@ -52,6 +52,20 @@
     var popup = single_marker.bindPopup('Karachi.<br> The City of Lights.').openPopup();
     popup.addTo(map);
 
-    L.geoJSON(karachi_district_geojson).addTo(map)
-    L.geoJSON(karachi_district_hq_geojson).addTo(map)
+    var karachi_district = L.geoJSON(karachi_district_geojson);
+    var district_hq = L.geoJSON(karachi_district_hq_geojson);
+
+    karachi_district.addTo(map);
+    district_hq.addTo(map);
+
+    base_layer = {
+        'OSM' :osm
+    }
+
+    other_layers = {
+        'Karachi District': karachi_district,
+        'District Headquarters': district_hq
+    }
+
+    L.control.layers(base_layer, other_layers).addTo(map)
 </script>
