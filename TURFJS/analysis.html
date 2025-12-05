@@ -27,6 +27,8 @@
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<!-- Turf JS -->
+ <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
 <!-- Karachi District -->
 <script src="./data/karachi_district.js"></script>
 <script src="./data/karachi_district_hq.js"></script>
@@ -52,7 +54,12 @@
     var popup = single_marker.bindPopup('Karachi.<br> The City of Lights.').openPopup();
     popup.addTo(map);
 
-    var karachi_district = L.geoJSON(karachi_district_geojson);
+    var karachi_district = L.geoJSON(karachi_district_geojson, {
+        onEachFeature: function(feature, layer){
+            area = (turf.area(feature)/1000000).toFixed(2);
+            layer.bindPopup('<b>Area: </b>' + area + ' km²')
+        }
+    });
     var district_hq = L.geoJSON(karachi_district_hq_geojson);
 
     karachi_district.addTo(map);
@@ -67,5 +74,5 @@
         'District Headquarters': district_hq
     }
 
-    L.control.layers(base_layer, other_layers).addTo(map)
+    L.control.layers(base_layer, other_layers).addTo(map);
 </script>
