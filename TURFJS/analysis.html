@@ -57,7 +57,10 @@
     var karachi_district = L.geoJSON(karachi_district_geojson, {
         onEachFeature: function(feature, layer){
             area = (turf.area(feature)/1000000).toFixed(2);
-            layer.bindPopup('<b>Area: </b>' + area + ' km²')
+            center_lat = turf.center(feature).geometry.coordinates[1]
+            center_long = turf.center(feature).geometry.coordinates[0]
+
+            layer.bindPopup('<b>Area: </b>' + area + ' km²<br>' + 'Center(x, y): ' + (center_lat,center_long))
         }
     });
     var district_hq = L.geoJSON(karachi_district_hq_geojson);
