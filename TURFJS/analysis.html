@@ -59,8 +59,9 @@
             area = (turf.area(feature)/1000000).toFixed(2);
             center_lat = turf.center(feature).geometry.coordinates[1]
             center_long = turf.center(feature).geometry.coordinates[0]
+            bbox = turf.bbox(feature).toString();
 
-            layer.bindPopup('<b>Area: </b>' + area + ' km²<br>' + 'Center(x, y): ' + (center_lat,center_long))
+            layer.bindPopup('<b>Area: </b>' + area + ' km²<br>' + 'Center(x, y): ' + (center_lat,center_long) + '<br> Bbox: [' + bbox + ']')
         }
     });
     var district_hq = L.geoJSON(karachi_district_hq_geojson);
