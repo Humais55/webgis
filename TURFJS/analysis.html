@@ -80,26 +80,30 @@
 
     L.control.layers(base_layer, other_layers).addTo(map);
 
-    // Turf Creating geometery (GeoJSON)
+    // Turf Creating geometry (GeoJSON) Below Code is not working will fix later In Sha ALLAH
 
-    var point = turf.multiPoint([[84.1240, 28.3949], [83.1240, 29.3949]])
-    // L.geoJSON(point).addTo(map)
+    // Point
+    var point = turf.multiPoint([[67.0011, 24.8607], [67.0011, 24.8607]]);
+    // L.geoJSON(point).addTo(map);
 
+    // LineStrings
     var linestring1 = turf.lineString([[-24, 63], [-23, 60], [-25, 65], [-20, 69]], { name: 'line 1' });
     var linestring2 = turf.lineString([[-14, 43], [-13, 40], [-15, 45], [-10, 49]], { name: 'line 2' });
-    // var linestring1Geojson = L.geoJSON(linestring1).addTo(map)
+    // L.geoJSON(linestring1).addTo(map);
 
-    var polygon = turf.polygon([[[-5, 52], [-4, 56], [-2, 51], [-7, 54], [-5, 52]]], { name: 'poly1' });
-    // var polygonGeojson = L.geoJSON(polygon).addTo(map)
+    // Polygon
+    var polygon1 = turf.polygon([[[-5, 52], [-4, 56], [-2, 51], [-7, 54], [-5, 52]]], { name: 'poly1' });
+    // L.geoJSON(polygon1).addTo(map);
 
-    var points = turf.randomPoint(10, { bbox: [80, 20, 90, 30] })
+    // Random Points
+    var points = turf.randomPoint(10, { bbox: [80, 20, 90, 30] });
+    var pointsGeojson = L.geoJSON(points).addTo(map);
 
-    // var pointsGeojson = L.geoJSON(points).addTo(map)
+    // Random Polygons
+    var polygonRandom = turf.randomPolygon(2, { bbox: [80, 20, 90, 30] });
+    L.geoJSON(polygonRandom).addTo(map);
 
-    var polygon = turf.randomPolygon(2, { bbox: [80, 20, 90, 30] })
-
-    var polygonGeojson = L.geoJSON(polygon).addTo(map)
-
-    map.fitBounds(pointsGeojson.getBounds())
+    // Fit map to points
+    map.fitBounds(pointsGeojson.getBounds());
 
 </script>
