@@ -115,7 +115,42 @@
     // Fit map to points
     map.fitBounds(pointsGeojson.getBounds());
 
-    // Buffer
+    // Difference
+
+     var polygon1 = turf.polygon([[
+        [128, -26],
+        [141, -26],
+        [141, -21],
+        [128, -21],
+        [128, -26]
+    ]], {
+        "fill": "#F00",
+        "fill-opacity": 0.1
+    });
+
+    // var polyGeojson = L.geoJSON(polygon1).addTo(map)
+
+    var polygon2 = turf.polygon([[
+        [126, -28],
+        [140, -28],
+        [140, -20],
+        [126, -20],
+        [126, -28]
+    ]], {
+        "fill": "#00F",
+        "fill-opacity": 0.1
+    });
+
+    //var polyGeojson2 = L.geoJSON(polygon2).addTo(map)
+
+
+    var difference = turf.difference(polygon1, polygon2);
+
+    var diffGeojson = L.geoJSON(difference).addTo(map)
+
+    //map.fitBounds(diffGeojson.getBounds())
+
+
 
 
 </script>
