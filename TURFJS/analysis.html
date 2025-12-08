@@ -64,7 +64,16 @@
             layer.bindPopup('<b>Area: </b>' + area + ' km²<br>' + 'Center(x, y): ' + (center_lat,center_long) + '<br> Bbox: [' + bbox + ']')
         }
     });
-    var district_hq = L.geoJSON(karachi_district_hq_geojson);
+    var district_hq = L.geoJSON(karachi_district_hq_geojson, {
+        onEachFeature : function (feature, layer){
+            var buffered = turf.buffer(feature, 3, {units: 'kilometers'});
+            L.geoJSON(buffered, {
+                onEachFeature: function(feature, layer){
+                    layer.bindPopup('This area is nearby ')
+                }
+            }).addTo(map) 
+        }
+    });
 
     karachi_district.addTo(map);
     district_hq.addTo(map);
@@ -105,5 +114,8 @@
 
     // Fit map to points
     map.fitBounds(pointsGeojson.getBounds());
+
+    // Buffer
+
 
 </script>
